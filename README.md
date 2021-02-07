@@ -3,10 +3,7 @@ Pixabay Gallery
 
 An image gallery app which shows images from Pixabay API, written in Kotlin using Android Architecture Components
 
-<img src="./Images/1.png" width=196/>
-<img src="./Images/2.png" width=196/>
-<img src="./Images/3.png" width=196/>
-<img src="./Images/4.png" width=196/>
+<img src="./Images/1.png" width=196/> <img src="./Images/2.png" width=196/> <img src="./Images/3.png" width=196/> <img src="./Images/4.png" width=196/>
 
 
 Pre-requisites
@@ -19,7 +16,7 @@ Pre-requisites
 
 Setup
 ------------
-Place api key under `~/local.properties`
+Place api key in `~/local.properties`
 ```
 API_KEY=<insert>
 ```  
