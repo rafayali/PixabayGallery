@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Airlift Case Study - Rafay Ali</string>
-    <string name="text_title_home">Gallery</string>
+    <string name="app_name">Pixabay Gallery</string>
     <string name="content_desc_item_image_home">Thumbnail of Image</string>
     <string name="text_retry_home">Oops! We were unable to load images</string>
     <string name="text_button_retry_home">Retry</string>
