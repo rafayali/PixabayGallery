@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Airlift Case Study - Rafay Ali</string>
+    <string name="text_title_home">Gallery</string>
+    <string name="content_desc_item_image_home">Thumbnail of Image</string>
+    <string name="text_retry_home">Oops! We were unable to load images</string>
+    <string name="text_button_retry_home">Retry</string>
+    <string name="content_desc_image_retry_home">Retry Icon</string>
+    <string name="content_desc_back_button_image">Back Button</string>
+    <string name="text_error_home">Error when performing network request</string>
+    <string name="content_desc_pixabay_logo">Pixabay Logo</string>
+</resources>
