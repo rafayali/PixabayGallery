@@ -15,7 +15,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,11 +30,6 @@ class HomeViewModelTests {
     private val testStateObserver = TestLiveDataObserver<State<List<HomeItem>>>()
 
     private val testErrorObserver = TestLiveDataObserver<Event<HomeViewModel.Error>>()
-
-    @Before
-    fun setup() {
-
-    }
 
     @After
     fun tearDown() {
@@ -104,23 +98,37 @@ class HomeViewModelTests {
         }
 
     @Test
-    fun `should call pixabayApi getImages exactly two times after creating viewModel and calling loadMore`() =
+    fun `_state should emit success on first and any follow up results when server return 200`() =
         coroutinesTestRule.runBlockingTest {
             coroutinesTestRule.testCoroutineDispatcher.pauseDispatcher()
 
             val mockPixabayApi = mockk<PixabayApi>(relaxed = true) {
-                coEvery { getImages(any()) } returns fakeGetImagesApiResult()
+                coEvery {
+                    getImages(any())
+                } coAnswers {
+                    fakeGetImagesApiResult()
+                } coAndThen {
+                    fakeGetImagesApiResult()
+                }
             }
 
-            val viewModel = HomeViewModel(mockPixabayApi)
-
-            viewModel.loadMore()
+            val viewModel = HomeViewModel(mockPixabayApi).apply {
+                state.observeForever(testStateObserver)
+                error.observeForever(testErrorObserver)
+                loadMore()
+            }
 
             coroutinesTestRule.testCoroutineDispatcher.resumeDispatcher()
+
+            assert(testStateObserver.values.firstOrNull() is State.Loading)
+            assert(testStateObserver.values.drop(1).firstOrNull() is State.Success)
+            assert(testStateObserver.values.drop(2).firstOrNull() is State.Success)
+            assert(testErrorObserver.values.isEmpty())
 
             coVerify(exactly = 2) { mockPixabayApi.getImages(any()) }
 
             viewModel.state.removeObserver(testStateObserver)
+            viewModel.error.removeObserver(testErrorObserver)
         }
 
     private fun fakeGetImagesApiResult() = Images(
