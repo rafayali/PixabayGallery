@@ -46,7 +46,6 @@ class HomeViewModelTests {
             coEvery { mockPixabayApi.getImages(any()) } returns fakeGetImagesApiResult()
 
             val viewModel = HomeViewModel(pixabayApi = mockPixabayApi)
-
             viewModel.state.observeForever(testStateObserver)
 
             assert(testStateObserver.values.firstOrNull() is State.Loading)
@@ -67,7 +66,6 @@ class HomeViewModelTests {
             coEvery { mockPixabayApi.getImages(any()) } throws Exception()
 
             val viewModel = HomeViewModel(mockPixabayApi)
-
             viewModel.state.observeForever(testStateObserver)
 
             assert(testStateObserver.values.firstOrNull() is State.Loading)
