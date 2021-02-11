@@ -10,8 +10,10 @@ import androidx.annotation.StyleRes
  * FrameLayout which keeps 1:1 aspect ratio by width
  */
 class SquaredFrameLayout(
-    context: Context, attrs: AttributeSet?,
-    @AttrRes defStyleAttr: Int, @StyleRes defStyleRes: Int
+    context: Context,
+    attrs: AttributeSet?,
+    @AttrRes defStyleAttr: Int,
+    @StyleRes defStyleRes: Int
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     constructor(context: Context) : this(context, null, 0, 0)

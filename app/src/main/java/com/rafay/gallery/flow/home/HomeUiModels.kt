@@ -1,7 +1,7 @@
 package com.rafay.gallery.flow.home
 
 import com.rafay.gallery.api.Images
-import java.util.*
+import java.util.UUID
 
 sealed class HomeItem(open val id: Long) {
 

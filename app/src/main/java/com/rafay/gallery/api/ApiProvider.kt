@@ -51,9 +51,11 @@ class RetrofitApiProvider : ApiProvider {
         retrofit = Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BuildConfig.API_BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(
-                Moshi.Builder().add(Images.Hit.Type.JsonAdapter()).build()
-            ))
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder().add(Images.Hit.Type.JsonAdapter()).build()
+                )
+            )
             .build()
     }
 

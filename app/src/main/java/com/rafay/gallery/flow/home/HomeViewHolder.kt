@@ -39,7 +39,6 @@ sealed class HomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     class Loader(view: View) : HomeViewHolder(view) {
 
         override fun bind(item: HomeItem) {
-
         }
     }
 }
