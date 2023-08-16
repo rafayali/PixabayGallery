@@ -29,7 +29,6 @@ data class Images(
         val imageSize: Long,
         val views: Long,
         val downloads: Long,
-        val favorites: Long,
         val likes: Long,
         val comments: Long,
 
