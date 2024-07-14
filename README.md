@@ -9,8 +9,8 @@ An image gallery app which shows images from Pixabay API, written in Kotlin usin
 Pre-requisites
 --------
 
-- Android SDK 30
-- Android Studio 4.1
+- Android SDK 34
+- Android Studio Koala
 - API key from [pixabay][1]
 
 
@@ -18,7 +18,7 @@ Setup
 ------------
 Place api key in `~/local.properties`
 ```
-API_KEY=<insert>
+API_KEY=<insert your key here>
 ```  
 
 
@@ -27,7 +27,7 @@ License
 
     MIT License
 
-    Copyright (c) 2021 Rafay Ali
+    Copyright (c) 2024 Rafay Ali
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
