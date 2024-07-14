@@ -30,7 +30,7 @@ sealed class HomeViewHolder(
                 binding.thumbImage.transitionName = "${item.id}"
 
                 binding.flImage.setOnClickListener {
-                    onImageClickListener.invoke(binding.flImage, adapterPosition)
+                    onImageClickListener.invoke(binding.flImage, bindingAdapterPosition)
                 }
             }
         }
