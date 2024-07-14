@@ -38,7 +38,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
                         e: GlideException?,
                         model: Any?,
                         target: Target<Drawable>,
-                        isFirstResource: Boolean
+                        isFirstResource: Boolean,
                     ): Boolean {
                         binding.progressIndicator.visibility = View.INVISIBLE
                         return false
@@ -49,7 +49,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
                         model: Any,
                         target: Target<Drawable>?,
                         dataSource: DataSource,
-                        isFirstResource: Boolean
+                        isFirstResource: Boolean,
                     ): Boolean {
                         binding.progressIndicator.visibility = View.INVISIBLE
                         return false
