@@ -15,8 +15,11 @@ class RecyclerViewPaginationListener(
     private val onScrolled: ((recyclerView: RecyclerView, dx: Int, dy: Int) -> Unit)? = null,
     private val loadMore: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
-
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+    override fun onScrolled(
+        recyclerView: RecyclerView,
+        dx: Int,
+        dy: Int,
+    ) {
         super.onScrolled(recyclerView, dx, dy)
 
         onScrolled?.invoke(recyclerView, dx, dy)
@@ -34,18 +37,19 @@ class RecyclerViewPaginationListener(
                 return maxSize
             }
 
-            val lastVisibleItem = when (it) {
-                is LinearLayoutManager -> {
-                    it.findLastVisibleItemPosition()
+            val lastVisibleItem =
+                when (it) {
+                    is LinearLayoutManager -> {
+                        it.findLastVisibleItemPosition()
+                    }
+                    is StaggeredGridLayoutManager -> {
+                        findLastVisibleItem(it.findLastVisibleItemPositions(null))
+                    }
+                    is GridLayoutManager -> {
+                        it.findLastVisibleItemPosition()
+                    }
+                    else -> error("Unsupported layout manager class ${it.javaClass}")
                 }
-                is StaggeredGridLayoutManager -> {
-                    findLastVisibleItem(it.findLastVisibleItemPositions(null))
-                }
-                is GridLayoutManager -> {
-                    it.findLastVisibleItemPosition()
-                }
-                else -> error("Unsupported layout manager class ${it.javaClass}")
-            }
 
             if (lastVisibleItem >= it.itemCount - THRESHOLD) {
                 loadMore.invoke()
@@ -53,7 +57,10 @@ class RecyclerViewPaginationListener(
         } ?: Timber.e("LayoutManager has not been set")
     }
 
-    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+    override fun onScrollStateChanged(
+        recyclerView: RecyclerView,
+        newState: Int,
+    ) {
         super.onScrollStateChanged(recyclerView, newState)
         onScrollStateChange?.invoke(recyclerView, newState)
     }

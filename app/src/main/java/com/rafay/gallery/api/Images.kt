@@ -9,7 +9,7 @@ import com.squareup.moshi.ToJson
 data class Images(
     val total: Long,
     val totalHits: Long,
-    val hits: List<Hit>
+    val hits: List<Hit>,
 ) {
     @JsonClass(generateAdapter = true)
     data class Hit(
@@ -31,26 +31,24 @@ data class Images(
         val downloads: Long,
         val likes: Long,
         val comments: Long,
-
         @Json(name = "user_id")
         val userID: Long,
-
         val user: String,
-        val userImageURL: String
+        val userImageURL: String,
     ) {
-
-        @Suppress("unused")
-        enum class Type(val value: String) {
+        enum class Type(
+            val value: String,
+        ) {
             Illustration("illustration"),
             Photo("photo"),
-            Vector("vector/svg");
+            Vector("vector/svg"),
+            ;
 
             companion object {
-                fun from(value: String) = values().first { it.value == value }
+                fun from(value: String) = entries.first { it.value == value }
             }
 
             class JsonAdapter {
-
                 @FromJson
                 fun fromJson(value: String) = from(value)
 

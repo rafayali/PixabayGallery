@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit
  * Interface for class which provides concrete implementation of api endpoints
  */
 interface ApiProvider {
-
     val pixabayApi: PixabayApi
 }
 
@@ -20,43 +19,51 @@ interface ApiProvider {
  * Concrete implementation of [ApiProvider] using [Retrofit] and [OkHttpClient]
  */
 class RetrofitApiProvider : ApiProvider {
-
     private val retrofit: Retrofit
 
     init {
-        val okHttpClient = OkHttpClient.Builder()
-            .writeTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .readTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .connectTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .callTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .addInterceptor {
-                val httpUrl =
-                    it.request().url.newBuilder()
-                        .addQueryParameter(QUERY_PARAM_KEY, BuildConfig.API_KEY)
-                        .build()
-                val request = it.request().newBuilder().url(httpUrl).build()
-                it.proceed(request)
-            }
-            .apply {
-                if (BuildConfig.DEBUG) {
-                    addInterceptor(
-                        HttpLoggingInterceptor().apply {
-                            setLevel(HttpLoggingInterceptor.Level.BODY)
-                        }
-                    )
-                }
-            }
-            .build()
+        val okHttpClient =
+            OkHttpClient
+                .Builder()
+                .writeTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .readTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .connectTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .callTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .addInterceptor {
+                    val httpUrl =
+                        it
+                            .request()
+                            .url
+                            .newBuilder()
+                            .addQueryParameter(QUERY_PARAM_KEY, BuildConfig.API_KEY)
+                            .build()
+                    val request =
+                        it
+                            .request()
+                            .newBuilder()
+                            .url(httpUrl)
+                            .build()
+                    it.proceed(request)
+                }.apply {
+                    if (BuildConfig.DEBUG) {
+                        addInterceptor(
+                            HttpLoggingInterceptor().apply {
+                                setLevel(HttpLoggingInterceptor.Level.BODY)
+                            },
+                        )
+                    }
+                }.build()
 
-        retrofit = Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder().add(Images.Hit.Type.JsonAdapter()).build()
-                )
-            )
-            .build()
+        retrofit =
+            Retrofit
+                .Builder()
+                .client(okHttpClient)
+                .baseUrl(BuildConfig.API_BASE_URL)
+                .addConverterFactory(
+                    MoshiConverterFactory.create(
+                        Moshi.Builder().add(Images.Hit.Type.JsonAdapter()).build(),
+                    ),
+                ).build()
     }
 
     override val pixabayApi: PixabayApi = retrofit.create(PixabayApi::class.java)

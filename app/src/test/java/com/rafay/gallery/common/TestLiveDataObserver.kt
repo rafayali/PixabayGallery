@@ -7,7 +7,6 @@ import androidx.lifecycle.Observer
  * Observer for tests which records all values emitted by [LiveData]
  */
 class TestLiveDataObserver<T> : Observer<T> {
-
     private val _values = mutableListOf<T>()
     val values: List<T> = _values
 

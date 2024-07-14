@@ -1,4 +1,4 @@
-package com.rafay.gallery.flow.home
+package com.rafay.gallery.screens.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,11 +15,10 @@ import com.rafay.gallery.common.GridItemDecoration
 import com.rafay.gallery.common.RecyclerViewPaginationListener
 import com.rafay.gallery.common.State
 import com.rafay.gallery.databinding.FragmentHomeBinding
-import com.rafay.gallery.flow.detail.DetailFragment
+import com.rafay.gallery.screens.detail.DetailFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-
     private lateinit var binding: FragmentHomeBinding
 
     private val viewModel by viewModel<HomeViewModel>()
@@ -36,18 +35,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentHomeBinding.bind(
-            requireNotNull(super.onCreateView(inflater, container, savedInstanceState))
-        )
+        binding =
+            FragmentHomeBinding.bind(
+                requireNotNull(super.onCreateView(inflater, container, savedInstanceState)),
+            )
 
         initView()
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.state.observe(viewLifecycleOwner) {
@@ -74,12 +77,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         viewModel.error.observe(viewLifecycleOwner) {
             it.consume()?.let {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.text_error_home),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.text_error_home),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             }
         }
     }
@@ -91,26 +94,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initView() {
-        adapter = HomeRecyclerViewAdapter { _, position ->
-            val images = viewModel.getImages().filterIsInstance<HomeItem.Image>().map {
-                DetailFragment.Params.Image(id = it.id, url = it.url)
-            }
+        adapter =
+            HomeRecyclerViewAdapter { _, position ->
+                val images =
+                    viewModel.getImages().filterIsInstance<HomeItem.Image>().map {
+                        DetailFragment.Params.Image(id = it.id, url = it.url)
+                    }
 
-            findNavController().navigate(
-                R.id.action_homeFragment_to_detailFragment,
-                bundleOf(
-                    DetailFragment.KEY_PARCELABLE_IMAGES to DetailFragment.Params(
-                        images = images,
-                        currentItem = position
-                    )
-                ),
-            )
-        }
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_detailFragment,
+                    bundleOf(
+                        DetailFragment.KEY_PARCELABLE_IMAGES to
+                            DetailFragment.Params(
+                                images = images,
+                                currentItem = position,
+                            ),
+                    ),
+                )
+            }
 
         binding.recyclerView.layoutManager =
             GridLayoutManager(requireContext(), GRID_SPAN, GridLayoutManager.VERTICAL, false)
         binding.recyclerView.addOnScrollListener(
-            RecyclerViewPaginationListener { viewModel.loadMore() }
+            RecyclerViewPaginationListener { viewModel.loadMore() },
         )
         binding.recyclerView.addItemDecoration(GridItemDecoration())
         binding.recyclerView.setPadding(GRID_PADDING, GRID_PADDING, GRID_PADDING, GRID_PADDING)

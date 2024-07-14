@@ -4,6 +4,7 @@ import com.rafay.gallery.api.ApiProvider
 import com.rafay.gallery.api.RetrofitApiProvider
 import org.koin.dsl.module
 
-val appModule = module {
-    single<ApiProvider> { RetrofitApiProvider() }
-}
+val appModule =
+    module {
+        single<ApiProvider> { RetrofitApiProvider() }
+    }

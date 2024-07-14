@@ -13,11 +13,13 @@ import org.junit.runners.model.Statement
 
 @ExperimentalCoroutinesApi
 class CoroutineTestRule : TestWatcher() {
-
     val testCoroutineDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
     private val testCoroutineScope = TestCoroutineScope(testCoroutineDispatcher)
 
-    override fun apply(base: Statement, description: Description?) = object : Statement() {
+    override fun apply(
+        base: Statement,
+        description: Description?,
+    ) = object : Statement() {
         @Throws(Throwable::class)
         override fun evaluate() {
             Dispatchers.setMain(testCoroutineDispatcher)
@@ -29,6 +31,5 @@ class CoroutineTestRule : TestWatcher() {
         }
     }
 
-    fun runBlockingTest(block: suspend TestCoroutineScope.() -> Unit) =
-        testCoroutineScope.runBlockingTest { block() }
+    fun runBlockingTest(block: suspend TestCoroutineScope.() -> Unit) = testCoroutineScope.runBlockingTest { block() }
 }

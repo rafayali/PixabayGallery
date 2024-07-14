@@ -1,4 +1,4 @@
-package com.rafay.gallery.flow.detail
+package com.rafay.gallery.screens.detail
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -16,19 +16,20 @@ import com.rafay.gallery.R
 import com.rafay.gallery.databinding.FragmentImageBinding
 
 class ImageFragment : Fragment(R.layout.fragment_image) {
-
     private lateinit var binding: FragmentImageBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentImageBinding.bind(
-            requireNotNull(super.onCreateView(inflater, container, savedInstanceState))
-        )
+        binding =
+            FragmentImageBinding.bind(
+                requireNotNull(super.onCreateView(inflater, container, savedInstanceState)),
+            )
 
-        Glide.with(binding.imageView.context)
+        Glide
+            .with(binding.imageView.context)
             .load(requireNotNull(requireArguments().getString(KEY_STRING_IMAGE_URL)))
             .thumbnail(0.1f)
             .listener(
@@ -37,7 +38,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
                         e: GlideException?,
                         model: Any?,
                         target: Target<Drawable>?,
-                        isFirstResource: Boolean
+                        isFirstResource: Boolean,
                     ): Boolean {
                         binding.progressIndicator.visibility = View.INVISIBLE
                         return false
@@ -48,14 +49,13 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
                         model: Any?,
                         target: Target<Drawable>?,
                         dataSource: DataSource?,
-                        isFirstResource: Boolean
+                        isFirstResource: Boolean,
                     ): Boolean {
                         binding.progressIndicator.visibility = View.INVISIBLE
                         return false
                     }
-                }
-            )
-            .into(binding.imageView)
+                },
+            ).into(binding.imageView)
 
         return binding.root
     }
@@ -63,10 +63,12 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
     companion object {
         private const val KEY_STRING_IMAGE_URL = "imageUrl"
 
-        fun newInstance(url: String) = ImageFragment().apply {
-            arguments = bundleOf(
-                KEY_STRING_IMAGE_URL to url,
-            )
-        }
+        fun newInstance(url: String) =
+            ImageFragment().apply {
+                arguments =
+                    bundleOf(
+                        KEY_STRING_IMAGE_URL to url,
+                    )
+            }
     }
 }

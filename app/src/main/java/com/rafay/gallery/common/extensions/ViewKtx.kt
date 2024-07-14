@@ -1,4 +1,4 @@
-package com.rafay.gallery.common
+package com.rafay.gallery.common.extensions
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

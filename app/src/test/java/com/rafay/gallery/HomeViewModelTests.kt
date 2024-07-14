@@ -7,8 +7,8 @@ import com.rafay.gallery.common.CoroutineTestRule
 import com.rafay.gallery.common.Event
 import com.rafay.gallery.common.State
 import com.rafay.gallery.common.TestLiveDataObserver
-import com.rafay.gallery.flow.home.HomeItem
-import com.rafay.gallery.flow.home.HomeViewModel
+import com.rafay.gallery.screens.home.HomeItem
+import com.rafay.gallery.screens.home.HomeViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -20,7 +20,6 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class HomeViewModelTests {
-
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
@@ -82,9 +81,10 @@ class HomeViewModelTests {
         coroutinesTestRule.runBlockingTest {
             coroutinesTestRule.testCoroutineDispatcher.pauseDispatcher()
 
-            val mockPixabayApi = mockk<PixabayApi>(relaxed = true) {
-                coEvery { getImages(any()) } returns fakeGetImagesApiResult()
-            }
+            val mockPixabayApi =
+                mockk<PixabayApi>(relaxed = true) {
+                    coEvery { getImages(any()) } returns fakeGetImagesApiResult()
+                }
 
             val viewModel = HomeViewModel(mockPixabayApi)
 
@@ -100,21 +100,23 @@ class HomeViewModelTests {
         coroutinesTestRule.runBlockingTest {
             coroutinesTestRule.testCoroutineDispatcher.pauseDispatcher()
 
-            val mockPixabayApi = mockk<PixabayApi>(relaxed = true) {
-                coEvery {
-                    getImages(any())
-                } coAnswers {
-                    fakeGetImagesApiResult()
-                } coAndThen {
-                    fakeGetImagesApiResult()
+            val mockPixabayApi =
+                mockk<PixabayApi>(relaxed = true) {
+                    coEvery {
+                        getImages(any())
+                    } coAnswers {
+                        fakeGetImagesApiResult()
+                    } coAndThen {
+                        fakeGetImagesApiResult()
+                    }
                 }
-            }
 
-            val viewModel = HomeViewModel(mockPixabayApi).apply {
-                state.observeForever(testStateObserver)
-                error.observeForever(testErrorObserver)
-                loadMore()
-            }
+            val viewModel =
+                HomeViewModel(mockPixabayApi).apply {
+                    state.observeForever(testStateObserver)
+                    error.observeForever(testErrorObserver)
+                    loadMore()
+                }
 
             coroutinesTestRule.testCoroutineDispatcher.resumeDispatcher()
 
@@ -129,34 +131,34 @@ class HomeViewModelTests {
             viewModel.error.removeObserver(testErrorObserver)
         }
 
-    private fun fakeGetImagesApiResult() = Images(
-        1,
-        1,
-        listOf(
-            Images.Hit(
-                1L,
-                "",
-                Images.Hit.Type.Photo,
-                "",
-                "",
-                1,
-                1,
-                "",
-                1,
-                1,
-                "",
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                "",
-                ""
-            )
+    private fun fakeGetImagesApiResult() =
+        Images(
+            1,
+            1,
+            listOf(
+                Images.Hit(
+                    1L,
+                    "",
+                    Images.Hit.Type.Photo,
+                    "",
+                    "",
+                    1,
+                    1,
+                    "",
+                    1,
+                    1,
+                    "",
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    "1",
+                    "",
+                ),
+            ),
         )
-    )
 }

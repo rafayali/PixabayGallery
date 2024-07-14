@@ -6,7 +6,6 @@ import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class PixabayGallery : Application() {
-
     override fun onCreate() {
         super.onCreate()
 

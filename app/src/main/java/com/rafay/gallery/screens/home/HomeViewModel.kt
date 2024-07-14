@@ -1,4 +1,4 @@
-package com.rafay.gallery.flow.home
+package com.rafay.gallery.screens.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,8 +12,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class HomeViewModel(private val pixabayApi: PixabayApi) : ViewModel() {
-
+class HomeViewModel(
+    private val pixabayApi: PixabayApi,
+) : ViewModel() {
     private var job: Job? = null
 
     private var page: Int = 1
@@ -61,44 +62,46 @@ class HomeViewModel(private val pixabayApi: PixabayApi) : ViewModel() {
     private fun load() {
         if (!shouldLoad) return
 
-        job = viewModelScope.launch {
-            shouldLoad = false
+        job =
+            viewModelScope.launch {
+                shouldLoad = false
 
-            val result = runCatching { pixabayApi.getImages(page) }
+                val result = runCatching { pixabayApi.getImages(page) }
 
-            result.exceptionOrNull()?.let { throwable ->
-                Timber.e(throwable)
-                if (throwable !is CancellationException) {
-                    if (_state.value !is State.Success) {
-                        _state.postValue(State.Retry)
-                    } else {
-                        _error.postValue(Event(Error.Generic))
+                result.exceptionOrNull()?.let { throwable ->
+                    Timber.e(throwable)
+                    if (throwable !is CancellationException) {
+                        if (_state.value !is State.Success) {
+                            _state.postValue(State.Retry)
+                        } else {
+                            _error.postValue(Event(Error.Generic))
+                        }
                     }
+                    return@launch
                 }
-                return@launch
-            }
 
-            with(result.getOrThrow()) {
-                hits.map {
-                    it.toHomeImageItem()
-                }.also {
-                    val images = mutableListOf<HomeItem>()
+                with(result.getOrThrow()) {
+                    hits
+                        .map {
+                            it.toHomeImageItem()
+                        }.also {
+                            val images = mutableListOf<HomeItem>()
 
-                    with(_state.value as? State.Success<List<HomeItem>>) {
-                        if (this != null) images.addAll(this.data)
-                    }
+                            with(_state.value as? State.Success<List<HomeItem>>) {
+                                if (this != null) images.addAll(this.data)
+                            }
 
-                    images.addAll(it)
+                            images.addAll(it)
 
-                    if (images.count() < totalHits) shouldLoad = true
+                            if (images.count() < totalHits) shouldLoad = true
 
-                    _state.postValue(State.Success<List<HomeItem>>(images))
+                            _state.postValue(State.Success<List<HomeItem>>(images))
+                        }
                 }
             }
-        }
     }
 
     enum class Error {
-        Generic
+        Generic,
     }
 }

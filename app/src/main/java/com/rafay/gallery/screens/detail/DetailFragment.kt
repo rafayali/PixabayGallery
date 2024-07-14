@@ -1,4 +1,4 @@
-package com.rafay.gallery.flow.detail
+package com.rafay.gallery.screens.detail
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -13,7 +13,6 @@ import com.rafay.gallery.databinding.FragmentDetailBinding
 import kotlinx.parcelize.Parcelize
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
-
     private lateinit var binding: FragmentDetailBinding
 
     private var pagerAdapter: ImageDetailPagerAdapter? = null
@@ -28,11 +27,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentDetailBinding.bind(
-            requireNotNull(super.onCreateView(inflater, container, savedInstanceState))
-        )
+        binding =
+            FragmentDetailBinding.bind(
+                requireNotNull(super.onCreateView(inflater, container, savedInstanceState)),
+            )
 
         initViews()
 
@@ -40,18 +40,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
     private fun initViews() {
-        pagerAdapter = ImageDetailPagerAdapter(this).also {
-            val images = requireNotNull(
-                requireArguments().getParcelable<Params>(KEY_PARCELABLE_IMAGES)
-            )
-            it.setImages(images.images)
-        }
+        pagerAdapter =
+            ImageDetailPagerAdapter(this).also {
+                val images =
+                    requireNotNull(
+                        requireArguments().getParcelable<Params>(KEY_PARCELABLE_IMAGES),
+                    )
+                it.setImages(images.images)
+            }
         binding.viewPager.adapter = pagerAdapter
         binding.viewPager.setCurrentItem(
             requireNotNull(
-                requireArguments().getParcelable<Params>(KEY_PARCELABLE_IMAGES)
+                requireArguments().getParcelable<Params>(KEY_PARCELABLE_IMAGES),
             ).currentItem,
-            false
+            false,
         )
 
         binding.imageButtonBack.setOnClickListener {
@@ -64,9 +66,14 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
     @Parcelize
-    data class Params(val images: List<Image>, val currentItem: Int) : Parcelable {
-
+    data class Params(
+        val images: List<Image>,
+        val currentItem: Int,
+    ) : Parcelable {
         @Parcelize
-        data class Image(val id: Long, val url: String) : Parcelable
+        data class Image(
+            val id: Long,
+            val url: String,
+        ) : Parcelable
     }
 }
